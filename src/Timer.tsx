@@ -13,7 +13,7 @@ type WorkoutProgress = {
   setNumber: number
 }
 
-const getTimerConfig = (index: number, timerConfig: TimerConfiguration): WorkoutProgress => {
+const getTimerConfig = (index: number, timerConfig: TimerConfiguration): WorkoutProgress[] => {
   const result = []
   if (timerConfig.workTime > 0) {
     result.push({ name: 'work', time: timerConfig.workTime, setNumber: index + 1 })
