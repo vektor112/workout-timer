@@ -1,5 +1,7 @@
 import { useState, useEffect, Dispatch } from "react"
 import { TimerConfiguration } from "./types"
+import useSound from "use-sound"
+import timerSound from "./assets/timer.mp3"
 
 interface TimerProps {
   timerConfig : TimerConfiguration
@@ -38,6 +40,7 @@ const Timer: React.FC<TimerProps> = ({
   const [time, setTime] = useState<number>(workoutProgress[workoutProgressState].time)
   const [isRunning, setIsRunning] = useState<boolean>(false)
   const [isFinished, setIsFinished] = useState<boolean>(false)
+  const [playTimerSound] = useSound(timerSound)
 
   const currentWorkoutProgress = workoutProgress[workoutProgressState]
   
@@ -47,9 +50,12 @@ const Timer: React.FC<TimerProps> = ({
       timerInterval = setInterval(() => {
         setTime((prevTime) => prevTime - 1)
       }, 1000)
+      if (time === 2) {
+        playTimerSound()
+      }
     } else if (time === 0 && workoutProgress.length - 1 === workoutProgressState) {
       clearInterval(timerInterval)
-      setIsFinished(true)
+      setIsFinished(true) 
     } else if (time === 0) {
       const nextWorkoutProgressState = workoutProgressState + 1
       setTimeout(() => {
@@ -63,6 +69,10 @@ const Timer: React.FC<TimerProps> = ({
   const handleReset = () => {
     setTimerConfig({ workTime: timerConfig.workTime, restTime: timerConfig.restTime, sets: timerConfig.sets })
     setShowTimer(false)
+  }
+
+  const handleStart = () => { 
+    setIsRunning(true)
   }
 
   const calculateColorOfState = () => {
@@ -89,7 +99,7 @@ const Timer: React.FC<TimerProps> = ({
             <div className="flex space-x-10">
               {!isRunning && !isFinished && (
                   <button 
-                    onClick={() => setIsRunning(true)}
+                    onClick={handleStart}
                     className="px-12 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
                     Start
                   </button>
