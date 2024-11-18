@@ -7,16 +7,22 @@ interface TimerProps {
   setShowTimer: Dispatch<boolean>
 }
 
+type WorkoutProgress = {
+  name: string
+  time: number
+  setNumber: number
+}
+
 const Timer: React.FC<TimerProps> = ({
   timerConfig,
   setTimerConfig,
   setShowTimer,
 }) => {
-  const workoutProgress = [
-    { type: 'preparation', time: 5 },
-    ...Array.from({ length: timerConfig.sets }, () => ([
-        { type: 'work', time: timerConfig.workTime },
-        { type: 'rest', time: timerConfig.restTime}
+  const workoutProgress: WorkoutProgress[] = [
+    { name: 'starting', time: 5, setNumber: 0 },
+    ...Array.from({ length: timerConfig.sets }, (_, index) => ([
+        { name: 'work', time: timerConfig.workTime, setNumber: index + 1 },
+        { name: 'rest', time: timerConfig.restTime, setNumber: index + 1 }
       ])
     ).flat()
   ]
@@ -52,9 +58,8 @@ const Timer: React.FC<TimerProps> = ({
     setShowTimer(false)
   }
 
-  
   const calculateColorOfState = () => {
-    switch (currentWorkoutProgress.type) {
+    switch (currentWorkoutProgress.name) {
       case 'work':
         return 'text-green-500'
       case 'rest':
@@ -69,8 +74,9 @@ const Timer: React.FC<TimerProps> = ({
       <div className="flex items-center justify-center h-screen">
         <div className="flex flex-col space-y-4">
           <div className="text-center mb-7">
-            <p className="text-9xl mb-7">{isFinished ? 'END' : time}</p>
-            <p className={`text-3xl ${calculateColorOfState()}`}>{!isFinished && currentWorkoutProgress.type}</p>
+            <p className="text-white text-9xl mb-7">{isFinished ? 'END' : time}</p>
+            <p className={`text-2xl font-bold ${calculateColorOfState()}`}>{!isFinished && currentWorkoutProgress.name}</p>
+            <p className="text-white italic text-1xl">{!isFinished && `Sets: ${currentWorkoutProgress.setNumber}/${timerConfig.sets}`}</p>
           </div>
           <div className="flex items-center justify-center">
             <div className="flex space-x-10">
@@ -93,7 +99,7 @@ const Timer: React.FC<TimerProps> = ({
             </div>
           </div>
           <div className="flex items-start justify-center">
-            <div className="flex mt-12">
+            <div className="flex mt-8">
               <button 
                 onClick={handleReset}
                 className="px-12 py-3 bg-purple-500 text-white font-semibold rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2">
