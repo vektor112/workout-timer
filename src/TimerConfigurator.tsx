@@ -23,23 +23,23 @@ const TimerConfigurator: React.FC<TimerConfiguratorProps> = ({
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-700">Configure a block</h2>
+      <div className="bg-gray-700 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-white text-2xl font-semibold mb-6 text-center">Configure a block</h2>
         
         <form className="space-y-4">
           <div>
-            <label htmlFor="work-time" className="block text-sm font-medium text-gray-700">Work Time (sec)</label>
+            <label htmlFor="work-time" className="block text-white text-sm font-medium">Work Time (sec)</label>
             <input
               type="number"
               id="work-time"
               value={workTime}
               onChange={(e) => setWorkTime(Number(e.target.value))}
-              className="text-gray-700 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
 
           <div>
-            <label htmlFor="rest-time" className="block text-sm font-medium text-gray-700">Rest Time (sec)</label>
+            <label htmlFor="rest-time" className="block text-white text-sm font-medium">Rest Time (sec)</label>
             <input
               type="number"
               id="rest-time"
@@ -50,7 +50,7 @@ const TimerConfigurator: React.FC<TimerConfiguratorProps> = ({
           </div>
 
           <div>
-            <label htmlFor="sets" className="block text-sm font-medium text-gray-700">Sets</label>
+            <label htmlFor="sets" className="block text-white text-sm font-medium">Sets</label>
             <input
               type="number"
               id="sets"
