@@ -13,6 +13,17 @@ type WorkoutProgress = {
   setNumber: number
 }
 
+const getTimerConfig = (index: number, timerConfig: TimerConfiguration): WorkoutProgress => {
+  const result = []
+  if (timerConfig.workTime > 0) {
+    result.push({ name: 'work', time: timerConfig.workTime, setNumber: index + 1 })
+  }
+  if (timerConfig.restTime > 0) {
+    result.push({ name: 'rest', time: timerConfig.restTime, setNumber: index + 1 })
+  }
+  return result
+}
+
 const Timer: React.FC<TimerProps> = ({
   timerConfig,
   setTimerConfig,
@@ -20,11 +31,7 @@ const Timer: React.FC<TimerProps> = ({
 }) => {
   const workoutProgress: WorkoutProgress[] = [
     { name: 'starting', time: 5, setNumber: 0 },
-    ...Array.from({ length: timerConfig.sets }, (_, index) => ([
-        { name: 'work', time: timerConfig.workTime, setNumber: index + 1 },
-        { name: 'rest', time: timerConfig.restTime, setNumber: index + 1 }
-      ])
-    ).flat()
+    ...Array.from({ length: timerConfig.sets }, (_, index) => (getTimerConfig(index, timerConfig))).flat()
   ]
 
   const [workoutProgressState, setWorkoutProgressState] = useState<number>(0)
@@ -102,7 +109,7 @@ const Timer: React.FC<TimerProps> = ({
             <div className="flex mt-8">
               <button 
                 onClick={handleReset}
-                className="px-12 py-3 bg-purple-500 text-white font-semibold rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2">
+                className="px-12 py-3 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                 Restart
               </button>
             </div>
