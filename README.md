@@ -1,1 +1,1 @@
-# workout-timer
+# Workout timer
