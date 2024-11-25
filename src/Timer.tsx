@@ -15,12 +15,12 @@ type WorkoutProgress = {
   setNumber: number
 }
 
-const getTimerConfig = (index: number, timerConfig: TimerConfiguration): WorkoutProgress[] => {
+const getTimerConfig = (index: number, timerConfig: TimerConfiguration, sets: number): WorkoutProgress[] => {
   const result = []
   if (timerConfig.workTime > 0) {
     result.push({ name: 'work', time: timerConfig.workTime, setNumber: index + 1 })
   }
-  if (timerConfig.restTime > 0) {
+  if (timerConfig.restTime > 0 && index < sets - 1) {
     result.push({ name: 'rest', time: timerConfig.restTime, setNumber: index + 1 })
   }
   return result
@@ -33,7 +33,7 @@ const Timer: React.FC<TimerProps> = ({
 }) => {
   const workoutProgress: WorkoutProgress[] = [
     { name: 'starting', time: 5, setNumber: 0 },
-    ...Array.from({ length: timerConfig.sets }, (_, index) => (getTimerConfig(index, timerConfig))).flat()
+    ...Array.from({ length: timerConfig.sets }, (_, index) => (getTimerConfig(index, timerConfig, timerConfig.sets))).flat()
   ]
 
   const [workoutProgressState, setWorkoutProgressState] = useState<number>(0)
@@ -55,7 +55,9 @@ const Timer: React.FC<TimerProps> = ({
       }
     } else if (time === 0 && workoutProgress.length - 1 === workoutProgressState) {
       clearInterval(timerInterval)
-      setIsFinished(true) 
+      setTimeout(() => {
+        setIsFinished(true) 
+      }, 1000)
     } else if (time === 0) {
       const nextWorkoutProgressState = workoutProgressState + 1
       setTimeout(() => {
